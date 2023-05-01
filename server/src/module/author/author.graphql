@@ -1,0 +1,34 @@
+type Author {
+  id: ID!
+  name: String!
+  gender: Gender # 1 man 0 woman
+  email: String!
+  books: [Book!]
+}
+input CreateAuthorInput {
+  name: String!
+  email: String!
+  gender: Gender
+}
+
+input UpdateAuthorInput {
+  id: ID!
+  name: String!,
+  gender: Gender
+}
+
+type Query {
+  authors: [Author!]
+  author(id: ID!): Author
+}
+
+type Mutation {
+  createAuthor(createAuthorInput: CreateAuthorInput!): Author!
+  updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
+  removeAuthor(id: ID!): Author
+}
+
+enum Gender {
+  MAN
+  WOMAN
+}

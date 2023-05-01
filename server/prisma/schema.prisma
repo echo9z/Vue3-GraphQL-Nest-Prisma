@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// 生成器
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 数据来源
+datasource db {
+  provider = "postgresql" // 数据源连接器
+  url      = env("DATABASE_URL") // PostgreSQL数据库服务器的连接URL
+}
+
+generator nestgraphql {
+  provider               = "node node_modules/prisma-nestjs-graphql"
+  output                 = "../src/@generated"
+  fields_Validator_from  = "class-validator"
+  fields_Validator_input = true
+}
+
+model Author {
+  id     String @id @default(uuid())
+  /// User's name
+  /// @Validator.MinLength(3)
+  /// @Validator.MaxLength(50)
+  name   String
+  gender Gender @default(MAN) // 1 man 0 woman
+  email  String @unique
+  books  Book[]
+}
+
+model Book {
+  id       String  @id @default(uuid())
+  name     String  @unique
+  type     String?
+  author   Author? @relation(fields: [authorId], references: [id])
+  authorId String?
+}
+
+enum Gender {
+  MAN
+  WOMAN
+}
